@@ -51,8 +51,7 @@ public class DynamicQuestionaire implements Initializable {
     }
     public void setParentController(MainWindow mainWindow)throws IOException {
         this.mainWindow=mainWindow;
-        //System.out.println(mainWindow);
-        //System.out.println(this.mainWindow);
+
     }
     public void displayQuestions() {
         for (int i = 0; i < questionsList.size(); i++) {

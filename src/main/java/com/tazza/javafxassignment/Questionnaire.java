@@ -134,8 +134,14 @@ public class Questionnaire {
         Participants p = new Participants(participantName,score);
 
         w.items.clear();
+        //The arrayList is necessited to be sent before the participant in order for the participant
+        //to be initialized or upadated with the List,
+        //if not sent before, the participant list of question will be empty
         w.getQuestionsList(givenQuestionsList);
+
         w.returnParticipant(p,"basic");
+
+
 
         Node node = (Node) actionEvent.getSource();
         Stage stage = (Stage)node.getScene().getWindow();

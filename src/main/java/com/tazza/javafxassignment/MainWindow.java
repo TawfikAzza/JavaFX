@@ -8,10 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
@@ -29,16 +26,16 @@ public class MainWindow extends Application {
     public Button dynQuestButton;
     public Label lblMessage;
     //List of questions from the new questionaire stored in a arrayList, (is it possible to have a class store an arrayType of datas?
-    List<Questions> questionsList= new ArrayList<Questions>();
+    List<Questions> questionsList= new ArrayList<>();
     //List of questions from the teachers as well as the answers given by the user
-    List<Questions> dynamicQuestionsList= new ArrayList<Questions>();
+    List<Questions> dynamicQuestionsList= new ArrayList<>();
     //This is the list of participants in the Liste on the right of the scene.
     @FXML
-    private ListView<String> participantDisplay = new ListView<String>();
+    private ListView<String> participantDisplay = new ListView<>();
 
     @FXML
     private Label labelName;
-    List<Participants> participantList = new ArrayList<Participants>();
+    List<Participants> participantList = new ArrayList<>();
     //Array to register the Participant in a String Array List type, the ListView seems to
     // only accpets ObservableList type of data (There surely exists a better way to do that)
     ObservableList<String> items = FXCollections.observableArrayList ();
@@ -115,14 +112,22 @@ public class MainWindow extends Application {
 
     public void returnParticipant(Participants p,String TypeQuestionaire) throws IOException {
         boolean added=false;
+        System.out.println(TypeQuestionaire);
+        if(participantList.size()==0) {
+            participantList.add(p);
+        }
         if(participantList.size()!=0) {
            for(int i=0;i<participantList.size();i++) {
                 if(participantList.get(i).getName().equals(p.getName())) {
                     participantList.get(i).setScore(p.getScore() + participantList.get(i).getScore());
-                    if(TypeQuestionaire=="basic") {
+                    if(TypeQuestionaire.equals("basic")) {
+                        System.out.println("BASIC IF ELSE IN RETURN PARTICPANTS : "+questionsList.size());
                         participantList.get(i).setQuestionsList(questionsList);
+                        //participantList.get(i).setQuestionsList(dynamicQuestionsList);
                     } else {
-                        participantList.get(i).setQuestionsList(dynamicQuestionsList);
+                        System.out.println("DYNAMIC IF ELSE IN RETURN PARTICPANTS");
+                        //participantList.get(i).setQuestionsList(questionsList);
+                        participantList.get(i).setDynamicQuestionsList(dynamicQuestionsList);
                     }
                     added=true;
                 }
@@ -195,7 +200,8 @@ public class MainWindow extends Application {
 
     public void getQuestionsList(List<Questions> givenQuestionsList) {
         this.questionsList=givenQuestionsList;
-       /* for (int i = 0; i < givenQuestionsList.size(); i++) {
+        //System.out.println("GET QUESTIONS :"+questionsList.size());
+        /*for (int i = 0; i < questionsList.size(); i++) {
             System.out.println("Question no : "+givenQuestionsList.get(i).getNumQuestion()
                     +" Question label : "+givenQuestionsList.get(i).getQuestion()
                     +" Answer : "+givenQuestionsList.get(i).getAnswer()
@@ -203,7 +209,42 @@ public class MainWindow extends Application {
         }*/
     }
 
-    public void clickMouse(MouseEvent mouseEvent) {
+    public void clickMouseListView(MouseEvent mouseEvent) {
+        String[] listViewCandidat;
+        String participant="";
+        int scoreParticipant=0;
         System.out.println(mouseEvent.getClickCount());
+        //String test = participantDisplay.getSelectionModel().getSelectedItems();
+        ObservableList<String> topics;
+        topics = participantDisplay.getSelectionModel().getSelectedItems();
+        Participants p = new Participants("",0);
+        //Use a for each in order to get the value contained in the Listview
+        for (String each: topics)
+        {
+            listViewCandidat = each.split(" ");
+            scoreParticipant=Integer.parseInt(listViewCandidat[1]);
+            participant=listViewCandidat[0];
+            System.out.println("participant :"+participant+" score "+scoreParticipant);
+        }
+        //I add the participants list clicked which correspond to the name of the participant selected
+        //need to loop in a for loop is needed, maybe there is a better way
+        for (int i = 0; i < participantList.size(); i++) {
+            if(participantList.get(i).getName().equals(participant)) {
+                p=participantList.get(i);
+            }
+        }
+        //if the participant name is not empty, it means the click on the listview returned a valid participant in the list and
+        //known in the participant list stored in the program
+        //
+        if(p.getName()!="") {
+             System.out.println("Participant p name ="+p.getName());
+            for (int i = 0; i < p.questionsList.size(); i++) {
+                System.out.println(" Question :"+p.questionsList.get(i).getQuestion()+" Answer : "+p.questionsList.get(i).getAnswer());
+            }
+            for (int i = 0; i < p.dynamicQuestionsList.size(); i++) {
+                System.out.println(" Question :"+p.dynamicQuestionsList.get(i).getQuestion()+" Answer : "+p.dynamicQuestionsList.get(i).getAnswer());
+            }
+        }
+
     }
 }
