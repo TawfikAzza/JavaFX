@@ -39,20 +39,20 @@ public class DynamicQuestionaire implements Initializable {
 
 
        // questionsList = mainWindow.retrieveQuestions();
-        System.out.println("size "+questionsList.size());
+        //System.out.println("size "+questionsList.size());
         sendResult.setOpacity(0);
 
     }
     public void retrieveQuestionaire(List<Questions> questionsList)throws IOException{
         this.questionsList=questionsList;
-        for (int i = 0; i < questionsList.size(); i++) {
+       /* for (int i = 0; i < questionsList.size(); i++) {
             System.out.println(questionsList.get(i).getQuestion());
-        }
+        }*/
     }
     public void setParentController(MainWindow mainWindow)throws IOException {
         this.mainWindow=mainWindow;
-        System.out.println(mainWindow);
-        System.out.println(this.mainWindow);
+        //System.out.println(mainWindow);
+        //System.out.println(this.mainWindow);
     }
     public void displayQuestions() {
         for (int i = 0; i < questionsList.size(); i++) {
@@ -60,6 +60,7 @@ public class DynamicQuestionaire implements Initializable {
             RadioButton rbn1= new RadioButton("Disagree");
             rbn1.setUserData(-1);
             RadioButton rbn2= new RadioButton("Neutral");
+            rbn2.setSelected(true);
             rbn2.setUserData(0);
             RadioButton rbn3= new RadioButton("Agree");
             rbn3.setUserData(1);
@@ -81,97 +82,49 @@ public class DynamicQuestionaire implements Initializable {
     @FXML
     private void getRadioButtonSelected() {
         String answer="";
-        /*String[] resultGroup1 = group1.getSelectedToggle().toString().split("'");
-        String[] resultGroup2 = group2.getSelectedToggle().toString().split("'");
-        String[] resultGroup3 = group3.getSelectedToggle().toString().split("'");
-        String[] resultGroup4 = group4.getSelectedToggle().toString().split("'");
-        String[] resultGroup5 = group5.getSelectedToggle().toString().split("'");
-        String[] resultGroup6 = group6.getSelectedToggle().toString().split("'");
-        String[] resultGroup7 = group7.getSelectedToggle().toString().split("'");
-        String[] resultGroup8 = group8.getSelectedToggle().toString().split("'");
-        String[] resultGroup9 = group9.getSelectedToggle().toString().split("'");*/
 
-       /* resultQuestionnaire.add(resultGroup1[1]);
-        resultQuestionnaire.add(resultGroup2[1]);
-        resultQuestionnaire.add(resultGroup3[1]);
-        resultQuestionnaire.add(resultGroup4[1]);
-        resultQuestionnaire.add(resultGroup5[1]);
-        resultQuestionnaire.add(resultGroup6[1]);
-        resultQuestionnaire.add(resultGroup7[1]);
-        resultQuestionnaire.add(resultGroup8[1]);
-        resultQuestionnaire.add(resultGroup9[1]);*/
         for (int i = 0; i < vBoxQuestion.getChildren().size(); i++) {
             HBox hbox = (HBox) vBoxQuestion.getChildren().get(i);
-           // System.out.println("HBOX CONTENT :"+hbox);
             for (int k = 0; k < hbox.getChildren().size(); k++) {
                 Node node = hbox.getChildren().get(k);
-                //RadioButton rbn = (RadioButton) node.getId();
-                //System.out.println("RadioButton :"+rbn.getText()+" IS SELECTED ? :"+rbn.isSelected());
+
                 if(node.getUserData()!=null) {
                     RadioButton rbn = (RadioButton) node;
-                   // System.out.println("NODE CONTENT :"+rbn.isSelected()+" Int response :"+(Integer.parseInt(rbn.getUserData().toString())));
-                    if(rbn.isSelected())
+                   if(rbn.isSelected())
                         switch (Integer.parseInt(rbn.getUserData().toString())) {
                             case -1:
                                 answer ="Disagree";
-                                System.out.println("case -1 answer ="+answer+" Question = "+questionsList.get(i-1).getQuestion());
                                 resultQuestionnaire.add(new Questions(i,questionsList.get(i-1).getQuestion(),answer,questionsList.get(i-1).getQuestionaireName()));
                                 score-=1;
                             break;
                             case 0:
                                 answer ="Neutral";
-                                System.out.println("case 0 answer ="+answer+" Question = "+questionsList.get(i-1).getQuestion());
-                                resultQuestionnaire.add(new Questions(i,questionsList.get(i-1).getQuestion(),answer, questionsList.get(i-1).getQuestionaireName()));
+                                 resultQuestionnaire.add(new Questions(i,questionsList.get(i-1).getQuestion(),answer, questionsList.get(i-1).getQuestionaireName()));
                                 score+=0;
                             break;
                             case 1:
                                 answer ="Agree";
-                                System.out.println("case 1 answer ="+answer+" Question = "+questionsList.get(i-1).getQuestion());
-                                resultQuestionnaire.add(new Questions(i,questionsList.get(i-1).getQuestion(),answer, questionsList.get(i-1).getQuestionaireName()));
+                                 resultQuestionnaire.add(new Questions(i,questionsList.get(i-1).getQuestion(),answer, questionsList.get(i-1).getQuestionaireName()));
                                 score+=1;
                             break;
                             default:
                             break;
 
                         }
-                        //System.out.println("VBOX = "+vBoxQuestion.getChildren().size()+" Res = "+resultQuestionnaire.size());
+
 
 
                     }
             }
         }
-
-      /*  for(int i=0;i<resultQuestionnaire.size();i++) {
-            switch(resultQuestionnaire.get(i)) {
-                case "Disagree":
-                    score -=1;
-                    break;
-                case "Neutral":
-                    score+=0;
-                    break;
-                case "Agree":
-                    score+=1;
-                    break;
-                default:
-                    break;
-            }
-        }
-        // System.out.println("score="+score);
-        resultCalculation.setText(String.valueOf(score));*/
-        for (int i = 0; i < resultQuestionnaire.size(); i++) {
-            System.out.println("Question no : "+resultQuestionnaire.get(i).getNumQuestion()
-                    +" Question label : "+resultQuestionnaire.get(i).getQuestion()
-                    +" Answer : "+resultQuestionnaire.get(i).getAnswer()
-            +"Questionaire name : "+resultQuestionnaire.get(i).getQuestionaireName());
-        }
-        System.out.println("Name participant ="+nameUser+" Score ="+score);
     }
 
     public void sendResult(ActionEvent actionEvent) throws IOException {
         Participants p = new Participants(nameUser,score);
         mainWindow.items.clear();
-        mainWindow.returnParticipant(p);
         mainWindow.getDynamicQuestionsList(resultQuestionnaire);
+        mainWindow.returnParticipant(p,"Dynamic");
+
         Node node = (Node) actionEvent.getSource();
         Stage stage = (Stage)node.getScene().getWindow();
         stage.close();

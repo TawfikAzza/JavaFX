@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
@@ -101,24 +102,28 @@ public class MainWindow extends Application {
         stage.show();
     }
     public void getNewQuestions(List<Questions> questionsList) {
-        this.questionsList=questionsList;
+        this.dynamicQuestionsList=questionsList;
     }
     public List<Questions> retrieveQuestions() {
-        if(questionsList.size()!=0) {
-            return questionsList;
+        if(dynamicQuestionsList.size()!=0) {
+            return dynamicQuestionsList;
         } else {
             //lblMessage.setText("No Questions has been currently added");
             return null;
         }
     }
 
-    public void returnParticipant(Participants p) throws IOException {
+    public void returnParticipant(Participants p,String TypeQuestionaire) throws IOException {
         boolean added=false;
         if(participantList.size()!=0) {
            for(int i=0;i<participantList.size();i++) {
                 if(participantList.get(i).getName().equals(p.getName())) {
                     participantList.get(i).setScore(p.getScore() + participantList.get(i).getScore());
-
+                    if(TypeQuestionaire=="basic") {
+                        participantList.get(i).setQuestionsList(questionsList);
+                    } else {
+                        participantList.get(i).setQuestionsList(dynamicQuestionsList);
+                    }
                     added=true;
                 }
                createObservableList(participantList.get(i));
@@ -152,19 +157,19 @@ public class MainWindow extends Application {
     public void dynamicQuest(ActionEvent actionEvent) throws IOException {
         if(checkNameUser())
             if(retrieveQuestions()!=null ) {
-                System.out.println(this);
+               // System.out.println(this);
                 //FXMLLoader loader = new FXMLLoader(MainWindow.class.getResource("src/main/resources/com/tazza/javafxassignment/DynamicQuestionaire.fxml"));
                 URL fxmlLocation = getClass().getResource("DynamicQuestionaire.fxml");
                 FXMLLoader loader = new FXMLLoader(fxmlLocation);
-                System.out.println(fxmlLocation);
+               // System.out.println(fxmlLocation);
                 //Parent root = loader.load();
 
                 Scene scene = new Scene(loader.load());
                 Stage stage = new Stage();
-                System.out.println(this);
+               // System.out.println(this);
                 DynamicQuestionaire dynamicQuestionaire = loader.getController();
                 dynamicQuestionaire.setParentController(this);
-                dynamicQuestionaire.retrieveQuestionaire(questionsList);
+                dynamicQuestionaire.retrieveQuestionaire(dynamicQuestionsList);
                 dynamicQuestionaire.displayQuestions();
                 dynamicQuestionaire.setNameUserText(name.getText());
                 stage.setScene(scene);
@@ -185,11 +190,20 @@ public class MainWindow extends Application {
     }
     public void getDynamicQuestionsList(List<Questions> dynamicQuestionsList) {
         this.dynamicQuestionsList=dynamicQuestionsList;
-        for (int i = 0; i < dynamicQuestionsList.size(); i++) {
-            System.out.println("Question no : "+dynamicQuestionsList.get(i).getNumQuestion()
-                    +" Question label : "+dynamicQuestionsList.get(i).getQuestion()
-                    +" Answer : "+dynamicQuestionsList.get(i).getAnswer()
-                    +"Questionaire name : "+dynamicQuestionsList.get(i).getQuestionaireName());
-        }
+
+    }
+
+    public void getQuestionsList(List<Questions> givenQuestionsList) {
+        this.questionsList=givenQuestionsList;
+       /* for (int i = 0; i < givenQuestionsList.size(); i++) {
+            System.out.println("Question no : "+givenQuestionsList.get(i).getNumQuestion()
+                    +" Question label : "+givenQuestionsList.get(i).getQuestion()
+                    +" Answer : "+givenQuestionsList.get(i).getAnswer()
+                    +" Questionaire name : "+givenQuestionsList.get(i).getQuestionaireName());
+        }*/
+    }
+
+    public void clickMouse(MouseEvent mouseEvent) {
+        System.out.println(mouseEvent.getClickCount());
     }
 }

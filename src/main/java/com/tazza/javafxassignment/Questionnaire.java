@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,47 +95,55 @@ public class Questionnaire {
         resultQuestionnaire.add(resultGroup8[1]);
         resultQuestionnaire.add(resultGroup9[1]);
         List<Node> node = gridPane.getChildren();
-        
+        List<String> tmpList = new ArrayList<>();
+        List<String> tmpList2 = new ArrayList<>();
         String[] test = node.toString().split("'");
+
         for (int i = 0; i < test.length; i++) {
-
-
-            System.out.println("HBOX :"+test[i]);
-
+            if(!test[i].toString().contains("["))
+                tmpList.add(test[i]);
         }
+        for (int i = 1; i < 10; i++) {
+            tmpList2.add(tmpList.get(i));
+        }
+
         for(int i=0;i<resultQuestionnaire.size();i++) {
-
-            //HBox hb = (HBox) node;
-
-
             switch(resultQuestionnaire.get(i)) {
                 case "Disagree":
                     score -=1;
+                    givenQuestionsList.add(new Questions(i+1,tmpList2.get(i),"Disagree","Teacher Questionaire"));
                     break;
                 case "Neutral":
                     score+=0;
+                    givenQuestionsList.add(new Questions(i+1,tmpList2.get(i),"Neutral","Teacher Questionaire"));
                     break;
                 case "Agree":
                     score+=1;
+                    givenQuestionsList.add(new Questions(i+1,tmpList2.get(i),"Agree","Teacher Questionaire"));
                     break;
                 default:
                     break;
             }
         }
-       // System.out.println("score="+score);
+        //System.out.println("SIZE GIVENQUESTION="+givenQuestionsList.size());
         resultCalculation.setText(String.valueOf(score));
+
     }
 
     public void sendResult(ActionEvent actionEvent) throws IOException {
         Participants p = new Participants(participantName,score);
+
         w.items.clear();
-        w.returnParticipant(p);
+        w.getQuestionsList(givenQuestionsList);
+        w.returnParticipant(p,"basic");
+
         Node node = (Node) actionEvent.getSource();
         Stage stage = (Stage)node.getScene().getWindow();
         stage.close();
     }
     public void reInit() {
         resultQuestionnaire.clear();
+        givenQuestionsList.clear();
         score=0;
     }
 }
