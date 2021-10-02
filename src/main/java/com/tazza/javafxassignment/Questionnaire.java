@@ -2,10 +2,15 @@ package com.tazza.javafxassignment;
 
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -15,6 +20,8 @@ import java.util.List;
 
 public class Questionnaire {
 
+    public GridPane gridPane;
+    List<Questions> givenQuestionsList= new ArrayList<Questions>();
     public ToggleGroup group1;
     public ToggleGroup group2;
     public ToggleGroup group3;
@@ -28,7 +35,7 @@ public class Questionnaire {
     List<String> resultQuestionnaire = new ArrayList<String>();
     public MainWindow w;
     @FXML
-    public Button calculateScore;
+    public Button calculateScorecalculateScore;
     @FXML
     public Button sendResultButton;
     @FXML
@@ -62,6 +69,7 @@ public class Questionnaire {
         getRadioButtonSelected();
        // System.out.println(calculateScore.getText());
         sendResultButton.setOpacity(1);
+
     }
 
     @FXML
@@ -85,8 +93,20 @@ public class Questionnaire {
         resultQuestionnaire.add(resultGroup7[1]);
         resultQuestionnaire.add(resultGroup8[1]);
         resultQuestionnaire.add(resultGroup9[1]);
+        List<Node> node = gridPane.getChildren();
+        
+        String[] test = node.toString().split("'");
+        for (int i = 0; i < test.length; i++) {
 
+
+            System.out.println("HBOX :"+test[i]);
+
+        }
         for(int i=0;i<resultQuestionnaire.size();i++) {
+
+            //HBox hb = (HBox) node;
+
+
             switch(resultQuestionnaire.get(i)) {
                 case "Disagree":
                     score -=1;
@@ -105,19 +125,16 @@ public class Questionnaire {
         resultCalculation.setText(String.valueOf(score));
     }
 
-    public void sendResult() throws IOException {
+    public void sendResult(ActionEvent actionEvent) throws IOException {
         Participants p = new Participants(participantName,score);
         w.items.clear();
         w.returnParticipant(p);
-
-        Stage stage = (Stage)sendResultButton.getScene().getWindow();
+        Node node = (Node) actionEvent.getSource();
+        Stage stage = (Stage)node.getScene().getWindow();
         stage.close();
     }
     public void reInit() {
         resultQuestionnaire.clear();
         score=0;
     }
-
-
-
 }
