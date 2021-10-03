@@ -54,6 +54,11 @@
                <Font name="System Bold" size="12.0" />
             </font>
          </Button>
+         <Button fx:id="viewStats" mnemonicParsing="false" onAction="#viewStat" prefHeight="26.0" prefWidth="125.0" text="View Statistics">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font>
+         </Button>
          <Label fx:id="lblMessage" />
       </VBox>
       <ListView fx:id="participantDisplay" onMouseClicked="#clickMouseListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
