@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane fx:id="anchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tazza.javafxassignment.DisplayParticipant">
+   <children>
+      <VBox fx:id="vBoxLeft" layoutX="229.0" layoutY="38.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="200.0" />
+      <Label fx:id="lblTitle" layoutX="286.0" layoutY="14.0" text="Label" AnchorPane.bottomAnchor="362.4" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="20.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Button fx:id="buttonCLose" layoutX="260.0" layoutY="361.0" mnemonicParsing="false" onAction="#closeWindow" text="Close" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="270.0" AnchorPane.rightAnchor="270.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <VBox fx:id="vBoxRight" AnchorPane.bottomAnchor="200.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="200.0" />
+   </children>
+</AnchorPane>

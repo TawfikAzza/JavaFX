@@ -167,9 +167,9 @@ public class MainWindow extends Application {
                 URL fxmlLocation = getClass().getResource("DynamicQuestionaire.fxml");
                 FXMLLoader loader = new FXMLLoader(fxmlLocation);
                // System.out.println(fxmlLocation);
-                //Parent root = loader.load();
+                Parent root = loader.load();
 
-                Scene scene = new Scene(loader.load());
+                Scene scene = new Scene(root);
                 Stage stage = new Stage();
                // System.out.println(this);
                 DynamicQuestionaire dynamicQuestionaire = loader.getController();
@@ -209,7 +209,7 @@ public class MainWindow extends Application {
         }*/
     }
 
-    public void clickMouseListView(MouseEvent mouseEvent) {
+    public void clickMouseListView(MouseEvent mouseEvent) throws IOException {
         String[] listViewCandidat;
         String participant="";
         int scoreParticipant=0;
@@ -245,6 +245,27 @@ public class MainWindow extends Application {
                 System.out.println(" Question :"+p.dynamicQuestionsList.get(i).getQuestion()+" Answer : "+p.dynamicQuestionsList.get(i).getAnswer());
             }
         }
+        //AT ths point in the program, I have everything I need in order to display the user Questions as well as the answer
+        // he/she provided for it be it the dynamic generated one or the static one(given by the teacher
+        //so now we have to generate the fxml loader with the display page and send the information to this
+        //fxml Controller (Name DiplayParticipant)
+        URL fxmlLocation = getClass().getResource("DisplayParticipant.fxml");
+        FXMLLoader loader = new FXMLLoader(fxmlLocation);
+        // System.out.println(fxmlLocation);
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        // System.out.println(this);
+
+        DisplayParticipant displayParticipant = loader.getController();
+        displayParticipant.setParticipant(p);
+        displayParticipant.displayParticipant();
+
+        stage.setScene(scene);
+        stage.setTitle("Overview of "+p.getName());
+        stage.show();
+
 
     }
 }
