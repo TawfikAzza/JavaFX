@@ -10,7 +10,7 @@
    <center>
       <VBox fx:id="vBoxQuestion">
          <children>
-            <HBox fx:id="hBoxQuestion" prefHeight="100.0" prefWidth="200.0" />
+            <HBox fx:id="hBoxQuestion" prefHeight="100.0" prefWidth="200.0" alignment="BASELINE_CENTER"/>
          </children>
       </VBox>
    </center>

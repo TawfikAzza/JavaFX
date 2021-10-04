@@ -121,7 +121,7 @@ public class DynamicQuestionaire implements Initializable {
     public void sendResult(ActionEvent actionEvent) throws IOException {
         Participants p = new Participants(nameUser,score);
         mainWindow.items.clear();
-        mainWindow.getDynamicQuestionsList(resultQuestionnaire);
+        mainWindow.getDynamicQuestionsList(p,resultQuestionnaire);
         mainWindow.returnParticipant(p,"Dynamic");
 
         Node node = (Node) actionEvent.getSource();

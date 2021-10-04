@@ -137,7 +137,7 @@ public class Questionnaire {
         //The arrayList is necessited to be sent before the participant in order for the participant
         //to be initialized or upadated with the List,
         //if not sent before, the participant list of question will be empty
-        w.getQuestionsList(givenQuestionsList);
+        w.getQuestionsList(p,givenQuestionsList);
 
         w.returnParticipant(p,"basic");
 

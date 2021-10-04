@@ -33,7 +33,7 @@ public class MainWindow extends Application {
     List<QuestionaireTaken> questionaireTakens = new ArrayList<>();
     @FXML
     private ListView<String> participantDisplay = new ListView<>();
-
+    private Participants currentParticipant;
     @FXML
     private Label labelName;
     List<Participants> participantList = new ArrayList<>();
@@ -116,7 +116,7 @@ public class MainWindow extends Application {
     public void returnParticipant(Participants p, String TypeQuestionaire) throws IOException {
         boolean added = false;
         boolean existInList = false;
-        System.out.println(TypeQuestionaire);
+        this.currentParticipant = p;
 
         if (participantList.size() == 0) {
             participantList.add(p);
@@ -139,19 +139,13 @@ public class MainWindow extends Application {
 
         if (participantList.size() != 0) {
             for (int i = 0; i < participantList.size(); i++) {
-                System.out.println("SIZE :" + participantList.size() + "IN FOR " + participantList.get(i).getName().equals(p.getName()));
                 if (participantList.get(i).getName().equals(p.getName())) {
-                    System.out.println("IN FIRST IF :");
-
                     if (TypeQuestionaire.equals("basic")) {
-                        System.out.println("BASIC IF ELSE IN RETURN PARTICPANTS : " + questionsList.size());
                         if(!added) {
                             participantList.get(i).setScore(p.getScore() + participantList.get(i).getScore());
                         }
                         participantList.get(i).setQuestionsList(questionsList);
-
                     } else {
-                        System.out.println("DYNAMIC IF ELSE IN RETURN PARTICPANTS");
                         if(!added) {
                             participantList.get(i).setScore(p.getScore() + participantList.get(i).getScore());
                         }
@@ -164,13 +158,11 @@ public class MainWindow extends Application {
             if (!added) {
                 participantList.add(p);
                 createObservableList(p);
-
             }
         } else {
             participantList.add(p);
             createObservableList(p);
         }
-
         writeListParticipants();
     }
 
@@ -222,15 +214,14 @@ public class MainWindow extends Application {
         }
     }
 
-    public void getDynamicQuestionsList(List<Questions> dynamicQuestionsList) {
+    public void getDynamicQuestionsList(Participants p,List<Questions> dynamicQuestionsList) {
         this.dynamicQuestionsList = dynamicQuestionsList;
+        questionaireTakens.add(new QuestionaireTaken(dynamicQuestionsList,p ));
     }
 
-    public void getQuestionsList(List<Questions> givenQuestionsList) {
+    public void getQuestionsList(Participants p, List<Questions> givenQuestionsList) {
         this.questionsList = givenQuestionsList;
-        for (int i = 0; i < givenQuestionsList.size(); i++) {
-            System.out.println(" Question = " + givenQuestionsList.get(i).getQuestion() + " Answer " + givenQuestionsList.get(i).getAnswer());
-        }
+        questionaireTakens.add(new QuestionaireTaken(p, givenQuestionsList));
     }
 
     public void clickMouseListView(MouseEvent mouseEvent) throws IOException {
@@ -246,7 +237,7 @@ public class MainWindow extends Application {
             listViewCandidat = each.split(" ");
             scoreParticipant = Integer.parseInt(listViewCandidat[1]);
             participant = listViewCandidat[0];
-            System.out.println("participant :" + participant + " score " + scoreParticipant);
+
         }
         //I add the participants list clicked which correspond to the name of the participant selected
         //need to loop in a for loop is needed, maybe there is a better way
@@ -258,7 +249,7 @@ public class MainWindow extends Application {
         //if the participant name is not empty, it means the click on the listview returned a valid participant in the list and
         //known in the participant list stored in the program
         //
-        if (p.getName() != "") {
+        /*if (p.getName() != "") {
             System.out.println("Participant p name =" + p.getName() + "SIZE = " + p.questionsList.size());
             for (int i = 0; i < p.questionsList.size(); i++) {
                 System.out.println(" Question :" + p.questionsList.get(i).getQuestion() + " Answer : " + p.questionsList.get(i).getAnswer());
@@ -266,7 +257,7 @@ public class MainWindow extends Application {
             for (int i = 0; i < p.dynamicQuestionsList.size(); i++) {
                 System.out.println(" Question :" + p.dynamicQuestionsList.get(i).getQuestion() + " Answer : " + p.dynamicQuestionsList.get(i).getAnswer());
             }
-        }
+        }*/
         //AT ths point in the program, I have everything I need in order to display the user Questions as well as the answer
         // he/she provided for it be it the dynamic generated one or the static one(given by the teacher
         //so now we have to generate the fxml loader with the display page and send the information to this
@@ -291,9 +282,9 @@ public class MainWindow extends Application {
 
 
     public void viewStat(ActionEvent actionEvent) throws IOException {
-        questionaireTakens.clear();
+        //questionaireTakens.clear();
         if (participantList.size() != 0) {
-            for (int i = 0; i < participantList.size(); i++) {
+          /*  for (int i = 0; i < participantList.size(); i++) {
                 if (participantList.get(i).questionsList.size() != 0 && participantList.get(i).dynamicQuestionsList.size() != 0) {
                     questionaireTakens.add(new QuestionaireTaken(participantList.get(i), participantList.get(i).questionsList, participantList.get(i).dynamicQuestionsList));
                 }
@@ -303,8 +294,8 @@ public class MainWindow extends Application {
                 if (participantList.get(i).questionsList.size() == 0 && participantList.get(i).dynamicQuestionsList.size() != 0) {
                     questionaireTakens.add(new QuestionaireTaken(participantList.get(i).dynamicQuestionsList, participantList.get(i)));
                 }
-            }
-            for (QuestionaireTaken questionaireTaken : questionaireTakens) {
+            }*/
+            /*for (QuestionaireTaken questionaireTaken : questionaireTakens) {
                 if (questionaireTaken.questionaireName != null) {
                     System.out.println("Participant : " + questionaireTaken.participant.getName() + " Questionaire : " +
                     questionaireTaken.questionaireName+" Score attained "+questionaireTaken.participant.getScore());
@@ -314,9 +305,18 @@ public class MainWindow extends Application {
                             questionaireTaken.dynQuestionaireName+" Score attained "+questionaireTaken.participant.getScore());
                 }
 
-            }
+            }*/
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("DisplayQuestionStat.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
 
+            DisplayQuestionStat displayQuestionStat = fxmlLoader.getController();
+            displayQuestionStat.setQt(questionaireTakens);
 
+            stage.setScene(scene);
+            stage.setTitle("Stats page");
+            stage.show();
         }
     }
 }
